@@ -43,10 +43,12 @@ fi
 
 echo "Importing any valid PGP keys..."
 if [ ! -z "${validpgpkeys:-}" ]; then
-        sudo -u builder gpg --recv-keys "$validpgpkeys"
+	for key in "${validpgpkeys[@]}"; do
+	        sudo -u builder gpg --recv-key "$key"
+	done
 fi
 
-pacman --noconfirm --noprogressbar -Syu
+pacman --noconfirm --noprogressbar -Syyu
 
 if [ ! -z "${IMTOOLAZYTOCHECKSUMS:-}" ]; then
 	echo "Updating checksums..."

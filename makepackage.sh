@@ -33,7 +33,7 @@ else
 fi
 
 source PKGBUILD
-repo_version=$(pacman -Siy "${pkgname}" | grep "Version" | cut -d":" -f2 | tr -d '[:space:]')
+repo_version=$(pacman -Siy "${pkgname}" | grep "Version" | cut -d":" -f2 | tr -d '[:space:]' || echo "0")
 package_version="${pkgver}-${pkgrel}"
 newenough="$(vercmp $repo_version $package_version)"
 if [ $newenough -ge 0 ]; then

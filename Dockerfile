@@ -1,13 +1,19 @@
 FROM jonathonf/manjaro:latest
 
 RUN pacman-mirrors -c all && \
-    pacman -Syuu --noconfirm --noprogressbar base-devel && \
+    pacman -Syuu --noconfirm --noprogressbar --needed base-devel && \
     pacman -Scc --noconfirm --noprogressbar && \
     rm -fr /var/cache/pacman/pkg/* && \
     rm -f /var/lib/pacman/sync/*
 
 RUN rm -fr /var/cache/pacman/pkg && \
     ln -s /pkgcache /var/cache/pacman/pkg
+
+RUN rm -f /etc/locale.conf && \
+    echo "LANG=en_US.UTF-8" > /etc/locale.conf && \
+    rm -f /etc/locale.gen && \
+    echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
+    /usr/bin/locale-gen en_US.UTF-8
 
 RUN /usr/bin/useradd -m builder && \
     echo 'builder ALL=(root) NOPASSWD:/usr/bin/pacman' > /etc/sudoers.d/makepkg

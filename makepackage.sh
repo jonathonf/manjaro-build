@@ -6,6 +6,7 @@ mkdir packages sources srcpackages makepkglogs || true
 cp -r /gpg /home/builder/.gnupg
 chown -R builder /build /home/builder
 sudo -u builder gpg --list-keys >/dev/null
+export CARCH=x86_64
 
 if [ ! -z "${PACKAGER:-}" ]; then
 	sed -i "122cPACKAGER=\"$PACKAGER\"" /etc/makepkg.conf
@@ -20,9 +21,9 @@ for package in /build/packages/*.pkg.tar.xz; do
 	rm -f /pkgcache/"$package"
 done
 
-if [ ! -r /build/packages/packages.db.tar.xz ]; then
+if [ ! -r /build/packages/packages.db.tar.gz ]; then
 	echo "Initialising local package repository..."
-	sudo -u builder repo-add /build/packages/packages.db.tar.xz
+	sudo -u builder repo-add /build/packages/packages.db.tar.gz
 fi
 
 countries="United_Kingdom,Germany,France,Denmark,Netherlands,Ireland"
